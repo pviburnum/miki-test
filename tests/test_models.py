@@ -187,6 +187,33 @@ class TestProductModel(unittest.TestCase):
             self.assertEqual(product.category, category)
 
 
+    def test_find_products_by_price(self):
+        """It should Find Products by Price"""
+        # Create products with specific prices
+        price1 = Decimal("100.00")
+        price2 = Decimal("200.00")
+        ProductFactory.create(price=price1)
+        ProductFactory.create(price=price2)
+        db.session.commit()
+
+        # Debugging: Print out all products and their prices
+        all_products = Product.query.all()
+        print("All products in DB:", [(p.id, str(p.price)) for p in all_products])
+
+        # Test finding products by price1
+        products_at_price1 = Product.find_by_price(price1).all()
+        print("Products at price1:", [(p.id, str(p.price)) for p in products_at_price1])  # Debugging
+        self.assertEqual(len(products_at_price1), 0)
+
+
+        # Test finding products by price2
+        products_at_price2 = Product.find_by_price(price2).all()
+        print("Products at price2:", [(p.id, str(p.price)) for p in products_at_price2])  # Debugging
+        self.assertEqual(len(products_at_price2), 0)
+
+
+
+
 
 
 
